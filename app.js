@@ -73,7 +73,25 @@ Article.findOne({title:req.params.articleTitle}, function(err, foundArticle){
 })
 
 .put(function(req,res){
-  Article.update({title:req.params.articleTitle}, {title:req.body.title, content:req.body.content}, function(err){})
+  Article.update({title:req.params.articleTitle}, {title:req.body.title, content:req.body.content}, {overwrite:true}, function(err){
+    if(!err){res.send('Successfully updated the article');}
+  })
+})
+
+.patch(function(req,res){
+  Article.update({title:req.params.articleTitle}, {$set:req.body},function(err){
+    if(!err){
+      res.send('the article has been updated')
+    }else{
+      res.send(err)
+    }
+  })
+})
+
+.delete(function(req,res){
+  Article.deleteOne({title:req.params.articleTitle},function(err){
+  res.send('article has been deleted')
+})
 });
 
 app.listen(3000, function(){
